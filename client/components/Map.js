@@ -6,7 +6,6 @@ class Map extends React.Component {
   constructor(props) {
     super(props);
     this.state = {};
-    initMap();
   }
   initMap() {
     var map = new google.maps.Map(document.getElementById('map'), {
