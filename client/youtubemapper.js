@@ -11,7 +11,7 @@ import 'babel-polyfill';
   Import Components
 */
 import App from './components/App';
-import Map from './components/Map';
+import Container from './components/Container';
 import Single from './components/Single';
 import PhotoGrid from './components/PhotoGrid';
 
@@ -39,7 +39,7 @@ render(
   <Provider store={store}>
     { /* Tell the Router to use our enhanced history */ }
     <Router history={history}>
-      <Route path="/" component={Map}>
+      <Route path="/" component={Container}>
       </Route>
     </Router>
   </Provider>,
