@@ -12,10 +12,10 @@
 
 */
 
-export function increment(i) {
+export function inputLocation(location) {
   return {
-    type: 'INCREMENT_LIKES',
-    index: i
+    type: 'INPUT_LOCATION',
+    location
   };
 }
 

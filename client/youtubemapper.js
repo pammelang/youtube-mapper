@@ -39,7 +39,7 @@ render(
   <Provider store={store}>
     { /* Tell the Router to use our enhanced history */ }
     <Router history={history}>
-      <Route path="/" component={Container}>
+      <Route path="/" component={App}>
       </Route>
     </Router>
   </Provider>,
