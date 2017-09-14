@@ -5,11 +5,9 @@ class Map extends React.Component {
   constructor(props) {
     super(props);
     const {lat, lng} = this.props.initialCenter;
+    const location = new maps.LatLng(lat, lng);
     this.state = {
-      currentLocation: {
-       lat: lat,
-       lng: lng
-     }
+      currentLocation: location
    };
    this.recenterMap = this.recenterMap.bind(this);
    this.loadMap = this.loadMap.bind(this);
@@ -27,11 +25,9 @@ class Map extends React.Component {
       if (navigator && navigator.geolocation) {
         navigator.geolocation.getCurrentPosition((pos) => {
           const coords = pos.coords;
+          const location = new maps.LatLng(coords.latitude, coords.longitude);
           this.setState({
-            currentLocation: {
-                lat: coords.latitude,
-                lng: coords.longitude
-            }
+            currentLocation: location
           })
         })
       }
@@ -81,10 +77,14 @@ class Map extends React.Component {
       // evntnames.forEach(e => {
       //   this.map.addListener(e, this.handleEvent(e));
       // });
-      this.map.addListener('dragend', (evt) => {
-        this.props.onMove(this.map);
+      this.map.addListener('center_changed', (evt) => {
+        const location = this.map.getCenter();
+        this.setState({
+          currentLocation: location
+        })
+        this.recenterMap();
       })
-      this.marker.addListener('click', function() {
+      this.marker.addListener('mouseover', (evt) => {
         this.infowindow.open(this.map, this.marker);
       });
       maps.event.trigger(this.map, 'ready');
@@ -107,13 +107,9 @@ class Map extends React.Component {
   }
   recenterMap() {
     const map = this.map;
-    const curr = this.state.currentLocation;
-
-    const google = this.props.google;
-    const maps = google.maps;
+    const center = this.state.currentLocation;
 
     if (map) {
-      let center = new maps.LatLng(curr.lat, curr.lng)
       map.panTo(center)
     }
   }
@@ -131,13 +127,12 @@ class Map extends React.Component {
   }
   handleSubmit(e) {
     e.preventDefault();
-    console.log(e);
-    const location ={lat: ReactDOM.findDOMNode(this.refs.lat).value, lng: ReactDOM.findDOMNode(this.refs.lng).value};
+
+    const google = this.props.google;
+    const maps = google.maps;
+    const location = new maps.LatLng(ReactDOM.findDOMNode(this.refs.lat).value, ReactDOM.findDOMNode(this.refs.lng).value);
     this.setState({
-      currentLocation: {
-          lat: location.lat,
-          lng: location.lng
-      }
+      currentLocation: location
     })
     this.recenterMap();
   }
